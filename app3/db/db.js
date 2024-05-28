@@ -1,5 +1,4 @@
 const { createClient } = require('redis');
-
 const connectDatabase = () => {
 
     const client = createClient();

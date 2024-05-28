@@ -23,12 +23,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-app.get('/index' ,token,async (req, res) => {
+app.get('/index' ,async (req, res) => {
     res.render('index');
   });
 
-app.get('/',(req,res)=>{
-    res.send("This is just for testing if the server is running fine or not!");
+app.get('/',token,(req,res)=>{
+    res.send("Hello World, This is for testing the server!");
 })
 
 app.get('/testing', async (req, res) => {
@@ -52,9 +52,7 @@ app.get('/testing', async (req, res) => {
 
 
 app.use('/api', tokenRoutes);
-
 const PORT = process.env.PORT || 3000;
-
 app.listen(PORT, () => {
     console.log(`Server is running on PORT ${PORT}`);
 });
