@@ -12,7 +12,7 @@ const generateToken = async (req, res) => {
     try {
         const token = jwt.sign(payload, secret, options);
 
-        await redisClient.set(token, token, {EX: 60*60*1}, 3600);
+        await redisClient.set(token, token, {EX: 60*1}, 3600);
 
         // res.cookie('token', token, {
         //     maxAge: 3600000, 

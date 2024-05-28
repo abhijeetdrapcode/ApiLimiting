@@ -4,7 +4,9 @@ const session = require('express-session');
 const cookieParser = require('cookie-parser'); 
 const connectDatabase = require('./db/db');
 const tokenRoutes = require('./routes/tokenRouter');
+const path = require('path');
 const axios = require('axios');
+const token = require('./middleware/token');
 
 connectDatabase();
 
@@ -17,6 +19,13 @@ app.use(session({
 }));
 
 app.use(cookieParser());
+app.use(express.static(path.join(__dirname, 'public')));
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+
+app.get('/index' ,token,async (req, res) => {
+    res.render('index');
+  });
 
 app.get('/',(req,res)=>{
     res.send("This is just for testing if the server is running fine or not!");

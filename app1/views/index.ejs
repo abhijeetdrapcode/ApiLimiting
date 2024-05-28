@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Landing Page</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .hero-section {
+            height: 100vh;
+            background: url('https://source.unsplash.com/random/1600x900') center center/cover no-repeat;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+        .hero-text {
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .features {
+            padding: 60px 0;
+        }
+        .feature {
+            padding: 20px;
+        }
+        .footer {
+            background-color: #343a40;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-section">
+        <div class="hero-text">
+            <h1 class="display-4">Welcome to Our Landing Page</h1>
+            <p class="lead">We are excited to have you here. Discover our amazing services and features.</p>
+            <a href="#features" class="btn btn-primary btn-lg">Learn More</a>
+        </div>
+    </header>
+
+    <section id="features" class="features text-center">
+        <div class="container">
+            <h2 class="mb-5">Features</h2>
+            <div class="row">
+                <div class="col-md-4 feature">
+                    <i class="fas fa-cog fa-4x mb-3"></i>
+                    <h3>Feature One</h3>
+                    <p>Details about the first feature of your service or product.</p>
+                </div>
+                <div class="col-md-4 feature">
+                    <i class="fas fa-cloud fa-4x mb-3"></i>
+                    <h3>Feature Two</h3>
+                    <p>Details about the second feature of your service or product.</p>
+                </div>
+                <div class="col-md-4 feature">
+                    <i class="fas fa-lock fa-4x mb-3"></i>
+                    <h3>Feature Three</h3>
+                    <p>Details about the third feature of your service or product.</p>
+                </div>
+            </div>
+            <div class="mt-4">
+                <button id="apiTest1" class="btn btn-success">Call API Test 1</button>
+                <button id="apiTest2" class="btn btn-info">Call API Test 2</button>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Your Company. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        function getCookie(name) {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return parts.pop().split(';').shift();
+        }
+
+        document.getElementById('apiTest1').addEventListener('click', async () => {
+            const token = getCookie('token');
+            if (!token) {
+                alert('No token found');
+                return;
+            }
+            try {
+                const response = await axios.get('http://localhost:4000/api/test1', {
+                    headers: {
+                        'x-auth-token': token
+                    }
+                });
+                console.log('Response data:', response.data);
+                alert('API Test 1 Response: ' + JSON.stringify(response.data));
+            } catch (error) {
+                console.error('Error:', error.message);
+                alert('An error occurred while fetching the data for API Test 1');
+            }
+        });
+
+        document.getElementById('apiTest2').addEventListener('click', async () => {
+            const token = getCookie('token');
+            if (!token) {
+                alert('No token found');
+                return;
+            }
+            try {
+                const response = await axios.get('http://localhost:4000/api/test2', {
+                    headers: {
+                        'x-auth-token': token
+                    }
+                });
+                console.log('Response data:', response.data);
+                alert('API Test 2 Response: ' + JSON.stringify(response.data));
+            } catch (error) {
+                console.error('Error:', error.message);
+                alert('An error occurred while fetching the data for API Test 2');
+            }
+        });
+    </script>
+</body>
+</html>
+
+
+
+
