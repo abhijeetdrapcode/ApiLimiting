@@ -23,11 +23,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-app.get('/index' ,async (req, res) => {
+app.get('/index',token ,async (req, res) => {
     res.render('index');
   });
 
-app.get('/',token,(req,res)=>{
+app.get('/',(req,res)=>{
     res.send("Hello World, This is for testing the server!");
 })
 
