@@ -1,24 +1,24 @@
-const jwt = require('jsonwebtoken');
-const connectDatabase = require('../db/db'); 
-
+const crypto = require('crypto');
+const connectDatabase = require('../db/db');
 const redisClient = connectDatabase();
 
 const generateToken = async (req, res) => {
-    const payload = { user: { id: 'abhijeetrana' } }; 
-    const secret =  'Abhijeet'; 
-    const options = { expiresIn: '1h' };
+  const payload = { user: { id: 'abhijeetrana' } };
+  const secret = 'Abhijeet'; 
+  const timestamp = Date.now().toString();
 
-    try {
-        const token = jwt.sign(payload, secret, options);
+  try {
+    const hash = crypto.createHmac('sha256', secret).update(JSON.stringify(payload) + timestamp).digest('hex');
+    const token = `${hash}.${timestamp}`;
 
-        await redisClient.set(token, token, {EX: 60*2}, 3600); // for testing, i had set this to 2 minutes
+    await redisClient.set(token, token, { EX: 60 * 20 }, 3600); // for testing, i had set this to 20 minutes
+    res.cookie('token', token, { maxAge: 3600000 }); 
 
-        res.cookie('token', token, { maxAge: 3600000 });
-        res.status(201).json({ token });
-    } catch (err) {
-        console.error('Error generating token:', err);
-        res.status(500).json({ error: 'Failed to generate token' });
-    }
+    res.status(201).json({ token });
+  } catch (err) {
+    console.error('Error generating token:', err);
+    res.status(500).json({ error: 'Failed to generate token' });
+  }
 };
 
 module.exports = generateToken;

@@ -7,8 +7,18 @@ const tokenRoutes = require('./routes/tokenRouter');
 const path = require('path');
 const axios = require('axios');
 const token = require('./middleware/token');
+const cors = require('cors');
+
 
 connectDatabase();
+// app.use(cors());
+
+app.use(
+    cors({
+      origin: "*",
+      credentials: true, 
+    })
+);
 
 app.use(express.json());
 app.use(session({
@@ -52,7 +62,7 @@ app.get('/testing', async (req, res) => {
 
 
 app.use('/api', tokenRoutes);
-const PORT = process.env.PORT || 3000;
+const PORT = 3000;
 app.listen(PORT, () => {
     console.log(`Server is running on PORT ${PORT}`);
 });
