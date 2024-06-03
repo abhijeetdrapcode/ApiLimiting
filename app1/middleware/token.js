@@ -14,7 +14,7 @@ const generateToken = (req, res, next) => {
 
     res.cookie('token', token, { maxAge: 3600000 }); 
 
-    redisClient.set(token, count, { EX: 60 * 60 * 1 }, 3600, (err, reply) => {
+    redisClient.set(token, count, { EX: 60 * 20 }, 3600, (err, reply) => {
       if (err) {
         console.error('Error saving token to Redis:', err);
         return next(err);

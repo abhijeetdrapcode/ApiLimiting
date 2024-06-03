@@ -18,7 +18,7 @@ const tokenValidator = async (req, res, next) => {
       return res.status(403).json({ msg: 'Access denied. Maximum API calls reached.' });
     }
 
-    await redisClient.set(token, count + 1);
+    await redisClient.set(token, count + 1,{ EX: 60 * 20 });
     next();
   } catch (err) {
     console.error('Error validating token:', err);

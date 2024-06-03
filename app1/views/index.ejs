@@ -7,7 +7,7 @@
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <style>
-        body{
+        body {
             background-color: slategray;
         }
     </style>
@@ -24,50 +24,77 @@
     </div>
 
     <script>
+        let token = getCookie('token');
+        let tokenExpiration = getCookie('tokenExpiration');
+        let clickCount = 0;
+
+        function setCookie(name, value, maxAgeSeconds) {
+            const date = new Date();
+            date.setTime(date.getTime() + (maxAgeSeconds * 1000));
+            document.cookie = `${name}=${value}; expires=${date.toUTCString()}; path=/`;
+        }
+
         function getCookie(name) {
             const value = `; ${document.cookie}`;
             const parts = value.split(`; ${name}=`);
             if (parts.length === 2) return parts.pop().split(';').shift();
         }
 
-        document.getElementById('apiTest1').addEventListener('click', async () => {
-            const token = getCookie('token');
-            if (!token) {
-                alert('No token found');
-                return;
-            }
+        async function generateNewToken() {
             try {
-                const response = await axios.get('http://localhost:4000/api/test1', {
+                const response = await axios.get('http://localhost:3000/api/generate-Token');
+                const newToken = response.data.token;
+                setCookie('token', newToken, 3600); 
+                console.log('New token:', newToken);
+                clickCount = 0;
+                return newToken;
+            } catch (error) {
+                console.error('Error generating token:', error.message);
+                throw error;
+            }
+        }
+
+        async function fetchData(apiUrl) {
+            try {
+                const currentTime = new Date().getTime();
+                const isTokenExpired = !tokenExpiration || currentTime >= tokenExpiration;
+
+                if (!token || isTokenExpired) {
+                    token = await generateNewToken();
+                    tokenExpiration = new Date().getTime() + (3600 * 1000);
+                } else if (clickCount === 5) {
+                    token = await generateNewToken();
+                    tokenExpiration = new Date().getTime() + (3600 * 1000); 
+                }
+
+                const response = await axios.get(apiUrl, {
                     headers: {
                         'x-auth-token': token
                     }
                 });
                 console.log('Response data:', response.data);
-                alert('API Test 1 Response: ' + JSON.stringify(response.data));
+                alert('API Response: ' + JSON.stringify(response.data));
+                clickCount++;
             } catch (error) {
-                console.error('Error:', error.message);
-                alert('An error occurred while fetching the data for API Test 1');
+                if (error.response && error.response.status === 401) {
+                    // Token expired
+                    console.log('Token expired, generating new token...');
+                    token = await generateNewToken();
+                    tokenExpiration = new Date().getTime() + (3600 * 1000); 
+                    await fetchData(apiUrl);
+                } else {
+                    console.error('Error:', error.message);
+                    alert('An error occurred while fetching the data');
+                }
             }
+        }
+
+        document.getElementById('apiTest1').addEventListener('click', async () => {
+            await fetchData('http://localhost:4000/api/test1');
         });
 
         document.getElementById('apiTest2').addEventListener('click', async () => {
-            const token = getCookie('token');
-            if (!token) {
-                alert('No token found');
-                return;
-            }
-            try {
-                const response = await axios.get('http://localhost:4000/api/test2', {
-                    headers: {
-                        'x-auth-token': token
-                    }
-                });
-                console.log('Response data:', response.data);
-                alert('API Test 2 Response: ' + JSON.stringify(response.data));
-            } catch (error) {
-                console.error('Error:', error.message);
-                alert('An error occurred while fetching the data for API Test 2');
-            }
+            await fetchData('http://localhost:4000/api/test2');
         });
     </script>
 
