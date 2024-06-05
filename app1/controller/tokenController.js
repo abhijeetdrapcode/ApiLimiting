@@ -13,7 +13,7 @@ const generateToken = async (req, res) => {
     const token = `${hash}.${timestamp}`;
 
     await redisClient.set(token, count, { EX: 60 * 20 }, 3600); // for testing, i had set this to 20 minutes
-    console.log("Token saved: ",token);
+    // console.log("Token saved: ",token);
     res.cookie('token', token, { maxAge: 3600000 }); 
 
     res.status(201).json({ token });

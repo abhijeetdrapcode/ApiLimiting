@@ -1,6 +1,5 @@
 const connectDatabase = require('../db/db');
 const redisClient = connectDatabase();
-const axios = require('axios');
 
 const tokenValidator = async (req, res, next) => {
   try {

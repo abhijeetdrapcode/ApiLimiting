@@ -6,7 +6,7 @@ router.get('/test1', (req, res) => {
 });
 
 router.get('/test2', (req, res) => {
-    res.send({ message: 'This endpoint is also just for testing, Endpoint 2' });
+    res.send({ message: 'Endpoint 2 working fine !' });
 });
 
 module.exports = router;
