@@ -12,7 +12,7 @@ const tokenValidator = async (req, res, next) => {
       return res.status(401).json({ msg: 'Invalid token, authorization denied!' });
     }
     const count = parseInt(tokenCount, 10);
-    if (count >= 5) {
+    if (count >= 1) {
       await redisClient.del(token);
       return res.status(403).json({ msg: 'Access denied. Maximum API calls reached.' });
     }

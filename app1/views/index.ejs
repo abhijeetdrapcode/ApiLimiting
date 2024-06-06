@@ -6,6 +6,7 @@
     <title>Landing Page</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
     <style>
         body {
             background-color: slategray;
@@ -20,14 +21,11 @@
             <hr class="my-4">
             <button id="apiTest1" class="btn btn-primary btn-lg mr-2">API Test 1</button>
             <button id="apiTest2" class="btn btn-secondary btn-lg">API Test 2</button>
-            <!-- <button onClick="window.location.reload();">Refresh Page</button> -->
         </div>
     </div>
 
     <script>
-        let token = getCookie('token');
-        let tokenExpiration = getCookie('tokenExpiration');
-        let clickCount = 0;
+        const socket = io();
 
         function setCookie(name, value, maxAgeSeconds) {
             const date = new Date();
@@ -41,31 +39,18 @@
             if (parts.length === 2) return parts.pop().split(';').shift();
         }
 
-        async function generateNewToken() {
-            try {
-                const response = await axios.get('http://localhost:3000/api/generate-Token');
-                const newToken = response.data.token;
-                setCookie('token', newToken, 3600); 
-                // console.log('New token:', newToken);
-                clickCount = 0;
-                return newToken;
-            } catch (error) {
-                console.error('Error generating token:', error.message);
-                throw error;
-            }
-        }
+        socket.on('newToken', (data) => {
+            console.log('Received new token:', data.token);
+            setCookie('token', data.token, 3600); // Set cookie for 1 hour
+        });
 
         async function fetchData(apiUrl) {
             try {
-                const currentTime = new Date().getTime();
-                const isTokenExpired = !tokenExpiration || currentTime >= tokenExpiration;
-
-                if (!token || isTokenExpired) {
-                    token = await generateNewToken();
-                    // tokenExpiration = new Date().getTime() + (3600 * 1000);
-                } else if (clickCount === 1) {
-                    token = await generateNewToken();
-                    // tokenExpiration = new Date().getTime() + (3600 * 1000); 
+                const token = getCookie('token');
+                if (!token) {
+                    console.log('No token found, requesting a new token...');
+                    socket.emit('requestNewToken');
+                    return;
                 }
 
                 const response = await axios.get(apiUrl, {
@@ -75,26 +60,25 @@
                 });
                 console.log('Response data:', response.data);
                 alert('API Response: ' + JSON.stringify(response.data));
-                clickCount++;
             } catch (error) {
+                console.error('Error:', error.message);
                 if (error.response && error.response.status === 401) {
-                    console.log('Token expired, generating new token...');
-                    token = await generateNewToken();
-                    tokenExpiration = new Date().getTime() + (3600 * 1000); 
-                    await fetchData(apiUrl);
+                    console.log('Token expired, requesting a new token...');
+                    socket.emit('requestNewToken');
                 } else {
-                    console.error('Error:', error.message);
                     alert('An error occurred while fetching the data');
                 }
             }
         }
 
-        document.getElementById('apiTest1').addEventListener('click', async () => {
-            await fetchData('http://localhost:4000/api/test1');
+        document.getElementById('apiTest1').addEventListener('click', () => {
+            socket.emit('buttonClick', { buttonId: 'apiTest1' });
+            fetchData('http://localhost:4000/api/test1');
         });
 
-        document.getElementById('apiTest2').addEventListener('click', async () => {
-            await fetchData('http://localhost:4000/api/test2');
+        document.getElementById('apiTest2').addEventListener('click', () => {
+            socket.emit('buttonClick', { buttonId: 'apiTest2' });
+            fetchData('http://localhost:4000/api/test2');
         });
     </script>
 
