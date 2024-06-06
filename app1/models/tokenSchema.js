@@ -14,6 +14,4 @@ const tokenSchema = new mongoose.Schema({
 
 module.exports = mongoose.model('Token', tokenSchema);
 
-
-//Was using mongodb to store the token earlier but now i have switched to redis db 
-// might need to reuse this code later
+//was using mongodb database earlier 

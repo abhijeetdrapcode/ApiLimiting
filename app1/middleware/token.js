@@ -1,10 +1,11 @@
+require('dotenv').config();
 const crypto = require('crypto');
 const connectDatabase = require('../db/db');
 const redisClient = connectDatabase();
 
 const generateToken = (req, res, next) => {
-  const payload = { user: { id: 'abhijeetrana' } };
-  const secret = 'Abhijeet'; 
+  const payload = process.env.PAYLOAD;
+  const secret = process.env.SECRET; 
   const timestamp = Date.now().toString();
   let count = 0;
 

@@ -41,7 +41,7 @@
 
         socket.on('newToken', (data) => {
             console.log('Received new token:', data.token);
-            setCookie('token', data.token, 3600); // Set cookie for 1 hour
+            setCookie('token', data.token, 3600); 
         });
 
         async function fetchData(apiUrl) {

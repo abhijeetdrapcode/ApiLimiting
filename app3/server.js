@@ -1,4 +1,4 @@
-// server.js
+require('dotenv').config();
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const connectDatabase = require('./db/db');
@@ -24,7 +24,7 @@ app.use(tokenValidator);
 
 app.use('/api', testRoutes);
 
-const PORT = 4000;
+const PORT = process.env.PORT;
 
 app.listen(PORT, () => {
     console.log(`Server is running on PORT ${PORT}`);
