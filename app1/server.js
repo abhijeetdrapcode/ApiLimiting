@@ -10,13 +10,13 @@ const cors = require('cors');
 const mongoose = require('./db/mongodb');
 const token = require('./middleware/token');
 const routes = require('./routes/clickDataRoute');
+const socketHandler = require('./controller/socket');
 
 const app = express();
 const server = http.createServer(app);
 const io = socketIO(server);
 const PORT = process.env.PORT;
 
-const socketHandler = require('./controller/socket');
 
 connectDatabase();
 

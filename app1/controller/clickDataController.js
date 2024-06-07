@@ -15,7 +15,7 @@ exports.saveClickData = async (data, req) => {
       SessionStorage: data.sessionStorageData,
     });
     const savedData = await clickData.save();
-    console.log('Data saved to MongoDB:', savedData);
+    // console.log('Data saved to MongoDB:', savedData);
   } catch (error) {
     console.error('Failed to insert data into MongoDB:', error);
   }

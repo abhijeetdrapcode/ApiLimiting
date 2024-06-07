@@ -8,7 +8,7 @@ module.exports = (io) => {
 
     socket.on('clickData', async (data) => {
       try {
-        console.log('Received click data:', data);
+        // console.log('Received click data:', data);
         const req = socket.request;
         const savedData = await clickDataController.saveClickData(data, req);
         socket.emit('clickDataSaved', { message: 'Click data saved successfully', data: savedData });
