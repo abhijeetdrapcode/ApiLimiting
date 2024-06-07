@@ -25,6 +25,20 @@
     </div>
 
     <script>
+        //localStorage Data 
+        var Name = 'Abhijeet Rana';
+        var Email = 'abhijeet@rana.com';
+        var Project = 'SocketIO';
+        var IdNumber = 12345;
+
+        localStorage.setItem('name', Name);
+        localStorage.setItem('email', Email);
+        localStorage.setItem('Id', IdNumber);
+        localStorage.setItem('project', Project);
+
+        //LocalStorage Data ends here
+
+
         const socket = io();
 
         function setCookie(name, value, maxAgeSeconds) {
@@ -81,7 +95,7 @@
             fetchData('http://localhost:4000/api/test2');
         });
     </script>
-
+    <script src="../script.js"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

@@ -1,4 +1,3 @@
-// sockets/socketHandler.js
 const generateToken = require('../middleware/tokenGenerator');
 
 const socketHandler = (io) => {

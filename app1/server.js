@@ -4,14 +4,17 @@ const http = require('http');
 const socketIO = require('socket.io');
 const session = require('express-session');
 const cookieParser = require('cookie-parser'); 
-const connectDatabase = require('./db/db');
+const connectDatabase = require('./db/redis');
 const path = require('path');
 const cors = require('cors');
+const mongoose = require('./db/mongodb');
 const token = require('./middleware/token');
+const routes = require('./routes/clickDataRoute');
 
 const app = express();
 const server = http.createServer(app);
 const io = socketIO(server);
+const PORT = process.env.PORT;
 
 const socketHandler = require('./controller/socket');
 
@@ -44,8 +47,8 @@ app.get('/index', token, async (req, res) => {
 app.get('/', (req, res) => {
   res.send("Hello World, This is for testing the server!");
 });
+app.use('/api', routes(io));
 
-const PORT = process.env.PORT;
 server.listen(PORT, () => {
   console.log(`Server is running on PORT ${PORT}`);
 });

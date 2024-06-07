@@ -1,5 +1,5 @@
 const crypto = require('crypto');
-const connectDatabase = require('../db/db');
+const connectDatabase = require('../db/redis');
 
 function generateToken(payload, secret) {
   if (!secret) {
@@ -11,9 +11,6 @@ function generateToken(payload, secret) {
   let count = 0;
 
   try {
-    // console.log('Payload:', payload);
-    // console.log('Secret:', secret);
-    // console.log('Timestamp:', timestamp);
 
     const hash = crypto.createHmac('sha256', secret).update(JSON.stringify(payload) + timestamp).digest('hex');
     const token = `${hash}.${timestamp}`;

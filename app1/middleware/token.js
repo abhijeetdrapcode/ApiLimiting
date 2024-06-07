@@ -1,6 +1,6 @@
 require('dotenv').config();
 const crypto = require('crypto');
-const connectDatabase = require('../db/db');
+const connectDatabase = require('../db/redis');
 const redisClient = connectDatabase();
 
 const generateToken = (req, res, next) => {
