@@ -4,7 +4,7 @@ const redisClient = connectDatabase();
 
 const generateToken = (req, res, next) => {
   const timestamp = Date.now().toString();
-  let count = 0;
+  let projectID = "123"; // Hardcoded projectID for now
 
   try {
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -15,14 +15,15 @@ const generateToken = (req, res, next) => {
       const randomIndex = Math.floor(Math.random() * characters.length);
       token += characters.charAt(randomIndex);
     }
-
     token = `${token}.${timestamp}`;
 
     res.cookie('token', token, { maxAge: 3600000 });
 
-    redisClient.set(token, count, { EX: 60 * 20 }, (err, reply) => {
+    const uniqueSessionId = `unique_sessionid`;
+    const sessionData = { [projectID]: token };
+    redisClient.set(uniqueSessionId, JSON.stringify(sessionData), { EX: 60 * 20 }, (err, reply) => {
       if (err) {
-        console.error('Error saving token to Redis:', err);
+        console.error('Error saving session data to Redis:', err);
         return next(err);
       }
     });

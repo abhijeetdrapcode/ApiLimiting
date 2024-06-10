@@ -2,22 +2,33 @@ const connectDatabase = require('../db/redisdb');
 const redisClient = connectDatabase();
 
 const tokenValidator = async (req, res, next) => {
+  const projectID = "123";
+
   try {
+    if (!projectID) {
+      return res.status(401).json({ msg: 'No ProjectID, authorization denied!' });
+    }
+
     const token = req.header('x-auth-token');
     if (!token) {
       return res.status(401).json({ msg: 'No Auth token, authorization denied!' });
     }
-    const tokenCount = await redisClient.get(token);
-    if (!tokenCount) {
-      return res.status(401).json({ msg: 'Invalid token, authorization denied!' });
-    }
-    const count = parseInt(tokenCount, 10);
-    if (count >= 1) {
-      await redisClient.del(token);
-      return res.status(403).json({ msg: 'Access denied. Maximum API calls reached.' });
+
+    const uniqueSessionId = `unique_sessionid`;
+    const sessionData = await redisClient.get(uniqueSessionId);
+
+    if (!sessionData) {
+      return res.status(403).json({ msg: 'Access denied.' });
     }
 
-    await redisClient.set(token, count + 1,{ EX: 60 * 20 });
+    const parsedSessionData = JSON.parse(sessionData);
+    const RedisToken = parsedSessionData[projectID];
+
+    if (token !== RedisToken) {
+      return res.status(403).json({ msg: 'Access denied.' });
+    }
+
+
     next();
   } catch (err) {
     console.error('Error validating token:', err);

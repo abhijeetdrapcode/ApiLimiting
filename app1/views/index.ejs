@@ -54,7 +54,7 @@
         }
 
         socket.on('newToken', (data) => {
-            console.log('Received new token:', data.token);
+            // console.log('Received new token:', data.token);
             setCookie('token', data.token, 3600); 
         });
 
@@ -85,14 +85,14 @@
             }
         }
 
-        document.getElementById('apiTest1').addEventListener('click', () => {
+        document.getElementById('apiTest1').addEventListener('click', async() => {
+            await fetchData('http://localhost:4000/api/test1');
             socket.emit('buttonClick', { buttonId: 'apiTest1' });
-            fetchData('http://localhost:4000/api/test1');
         });
 
-        document.getElementById('apiTest2').addEventListener('click', () => {
+        document.getElementById('apiTest2').addEventListener('click', async() => {
+            await fetchData('http://localhost:4000/api/test2');
             socket.emit('buttonClick', { buttonId: 'apiTest2' });
-            fetchData('http://localhost:4000/api/test2');
         });
     </script>
     <script src="../script.js"></script>
