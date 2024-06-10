@@ -1,19 +1,22 @@
-const crypto = require('crypto');
 const connectDatabase = require('../db/redis');
 
-function generateToken(payload, secret) {
-  if (!secret) {
-    throw new Error('Secret is required to generate token');
-  }
+function generateToken() {
 
   const redisClient = connectDatabase();
   const timestamp = Date.now().toString();
   let count = 0;
 
   try {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let token = '';
+    const tokenLength = 32;
 
-    const hash = crypto.createHmac('sha256', secret).update(JSON.stringify(payload) + timestamp).digest('hex');
-    const token = `${hash}.${timestamp}`;
+    for (let i = 0; i < tokenLength; i++) {
+      const randomIndex = Math.floor(Math.random() * characters.length);
+      token += characters.charAt(randomIndex);
+    }
+
+    token = `${token}.${timestamp}`;
 
     redisClient.set(token, count, { EX: 60 * 20 }, (err, reply) => {
       if (err) {
@@ -29,4 +32,5 @@ function generateToken(payload, secret) {
     throw new Error('Failed to generate token');
   }
 }
+
 module.exports = generateToken;

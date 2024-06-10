@@ -1,7 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const cookieParser = require('cookie-parser');
-const connectDatabase = require('./db/db');
+const connectDatabase = require('./db/redisdb');
 const tokenValidator = require('./middleware/tokenValidator');
 const testRoutes = require('./routes/testRoutes');
 const cors = require('cors');

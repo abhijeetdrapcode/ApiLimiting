@@ -1,4 +1,4 @@
-const connectDatabase = require('../db/db');
+const connectDatabase = require('../db/redisdb');
 const redisClient = connectDatabase();
 
 const tokenValidator = async (req, res, next) => {
