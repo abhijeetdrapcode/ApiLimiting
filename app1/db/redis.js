@@ -14,5 +14,6 @@ const connectDatabase = () => {
     client.connect().catch(console.error);
     return client;
 };
+const redisClient = connectDatabase();
 
-module.exports = connectDatabase;
+module.exports = redisClient;

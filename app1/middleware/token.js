@@ -1,10 +1,10 @@
 require('dotenv').config();
-const connectDatabase = require('../db/redis');
-const redisClient = connectDatabase();
+const redisClient = require('../db/redis');
 
 const generateToken = (req, res, next) => {
   const timestamp = Date.now().toString();
   let projectID = "123"; 
+  const uniqueSessionId = `unique_sessionid`;
 
   try {
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -18,8 +18,7 @@ const generateToken = (req, res, next) => {
     token = `${token}.${timestamp}`;
 
     res.cookie('token', token, { maxAge: 1800000});
-
-    const uniqueSessionId = `unique_sessionid`;
+    
     const Data = { [projectID]: token };
     redisClient.set(uniqueSessionId, JSON.stringify(Data), { EX: 60 * 60 }, (err, reply) => {
       if (err) {

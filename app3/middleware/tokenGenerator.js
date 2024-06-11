@@ -1,7 +1,7 @@
-const connectDatabase = require('../db/redisdb');
+const redisClient = require('../db/redisdb');
 
 function generateToken() {
-  const redisClient = connectDatabase();
+  // const redisClient = connectDatabase();
   const timestamp = Date.now().toString();
   const projectID = "123";
 
@@ -27,7 +27,6 @@ function generateToken() {
       }
     });
 
-    // console.log('Generated token:', token);
     return token;
   } catch (err) {
     console.error('Error generating token:', err);
