@@ -27,7 +27,7 @@ function generateToken() {
       }
     });
 
-    console.log('Generated token:', token);
+    // console.log('Generated token:', token);
     return token;
   } catch (err) {
     console.error('Error generating token:', err);

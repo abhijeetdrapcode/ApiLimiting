@@ -11,7 +11,6 @@ const tokenValidator = async (req, res, next) => {
     }
 
     const token = req.header('x-auth-token');
-    console.log("token ",token);
     if (!token) {
       return res.status(401).json({ msg: 'No Auth token, authorization denied!' });
     }
@@ -29,15 +28,11 @@ const tokenValidator = async (req, res, next) => {
     if (token !== RedisToken) {
       return res.status(403).json({ msg: 'Access denied.' });
     }
-    // res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+
     const newToken = generateToken();
-    console.log("newToken: ",newToken);
     res.header('Access-Control-Expose-Headers','auth_token');
     res.header('auth_token', newToken);
-    
-    // res.cookie('token', newToken, { maxAge: 3600000, path: '/' });
-    // res.cookie('auth_token', newToken, { httpOnly: true, secure: true });
-    // res.cookie('token', newToken);
+
     next();
   } catch (err) {
     console.error('Error validating token:', err);
