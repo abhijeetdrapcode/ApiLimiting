@@ -1,4 +1,4 @@
-const connectDatabase = require('../db/redis');
+const connectDatabase = require('../db/redisdb');
 
 function generateToken() {
   const redisClient = connectDatabase();
@@ -18,9 +18,9 @@ function generateToken() {
     token = `${token}.${timestamp}`;
 
     const uniqueSessionId = `unique_sessionid`;
-    const sessionData = { [projectID]: token };
+    const Data = { [projectID]: token };
 
-    redisClient.set(uniqueSessionId, JSON.stringify(sessionData), { EX: 60 * 30 }, (err, reply) => {
+    redisClient.set(uniqueSessionId, JSON.stringify(Data), { EX: 60 * 60 }, (err, reply) => {
       if (err) {
         console.error('Error saving session data to Redis:', err);
         throw new Error('Failed to save token');

@@ -11,7 +11,8 @@ const app = express();
 app.use(
     cors({
       origin: "*",
-      credentials: true, 
+      credentials: true,
+      // exposedHeaders: 'auth_token' 
     })
 );
 
@@ -21,7 +22,7 @@ app.use(cookieParser());
 connectDatabase();
 
 app.use(tokenValidator); 
-
+ 
 app.use('/api', testRoutes);
 
 const PORT = process.env.PORT;

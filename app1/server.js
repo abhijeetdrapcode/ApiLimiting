@@ -4,13 +4,11 @@ const http = require('http');
 const socketIO = require('socket.io');
 const session = require('express-session');
 const cookieParser = require('cookie-parser'); 
-const connectDatabase = require('./db/redis');
 const path = require('path');
 const cors = require('cors');
 const mongoose = require('./db/mongodb');
 const token = require('./middleware/token');
 const routes = require('./routes/clickDataRoute');
-const socketHandler = require('./controller/socket');
 
 const app = express();
 const server = http.createServer(app);
@@ -18,7 +16,7 @@ const io = socketIO(server);
 const PORT = process.env.PORT;
 
 
-connectDatabase();
+// connectDatabase();
 
 app.use(cors({
   origin: "*",
@@ -38,7 +36,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-socketHandler(io);
 
 app.get('/index', token, async (req, res) => {
   res.render('index');

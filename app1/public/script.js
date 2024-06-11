@@ -11,7 +11,7 @@ const headers = {
   'Referer': document.referrer
 };
 
-// const socket = io(serverURL, { transports: ['websocket'], extraHeaders: headers });
+const socket = io(serverURL, { transports: ['websocket'], extraHeaders: headers });
 
 socket.on('connect_error', (error) => {
   console.error('Socket connection error:', error);
