@@ -53,7 +53,7 @@
             try {
                 const token = getCookie('token');
                 if (!token) {
-                    alert('No token found. Please reload the page.');
+                    alert('Session Expired. Please reload the page.');
                     return;
                 }
                 const response = await axios.get(apiUrl, {
@@ -67,11 +67,7 @@
                 setCookie('token', cookiedata, 1800); //i have already multiplied by 1000 in the function so no need to multiply by 1000 seperately here just time*seconds will work fine 
             } catch (error) {
                 console.error('Error:', error.message);
-                if (error.response && error.response.status === 401) {
-                    alert('Token expired. Please reload the page.');
-                } else {
-                    alert('An error occurred while fetching the data');
-                }
+                    alert('An error occurred while fetching the data, Plz reload the page!');
             }
         }
 
