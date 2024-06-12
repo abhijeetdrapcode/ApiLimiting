@@ -6,7 +6,7 @@ router.get('/test1', (req, res) => {
 });
 
 router.get('/test2', (req, res) => {
-    res.send({ message: 'Endpoint 2 is working fine !' });
+    res.send({ message: 'Endpoint 2 is also working fine !' });
 });
 
 module.exports = router;

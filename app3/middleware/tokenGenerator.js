@@ -1,9 +1,9 @@
 const redisClient = require('../db/redisdb');
 
 function generateToken() {
-  // const redisClient = connectDatabase();
   const timestamp = Date.now().toString();
   const projectID = "123";
+  const uniqueSessionId = `unique_sessionid`;
 
   try {
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -17,7 +17,6 @@ function generateToken() {
 
     token = `${token}.${timestamp}`;
 
-    const uniqueSessionId = `unique_sessionid`;
     const Data = { [projectID]: token };
 
     redisClient.set(uniqueSessionId, JSON.stringify(Data), { EX: 60 * 60 }, (err, reply) => {

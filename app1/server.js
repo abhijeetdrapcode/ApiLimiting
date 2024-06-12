@@ -16,8 +16,6 @@ const io = socketIO(server);
 const PORT = process.env.PORT;
 
 
-// connectDatabase();
-
 app.use(cors({
   origin: "*",
   credentials: true,

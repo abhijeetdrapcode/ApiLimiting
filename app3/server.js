@@ -6,22 +6,19 @@ const testRoutes = require('./routes/testRoutes');
 const cors = require('cors');
 
 const app = express();
-// app.use(cors());
+
 app.use(
     cors({
       origin: "*",
       credentials: true,
-      // exposedHeaders: 'auth_token' 
+
     })
 );
 
 app.use(express.json());
 app.use(cookieParser());
 
-// connectDatabase();
-
 app.use(tokenValidator); 
- 
 app.use('/api', testRoutes);
 
 const PORT = process.env.PORT;

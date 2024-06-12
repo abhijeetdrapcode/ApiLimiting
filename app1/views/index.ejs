@@ -64,7 +64,7 @@
                 console.log('Response data:', response.data);
                 const cookiedata = response.headers['auth_token']
                 alert('API Response: ' + JSON.stringify(response.data));
-                setCookie('token', cookiedata, 180000);
+                setCookie('token', cookiedata, 1800); //i have already multiplied by 1000 in the function so no need to multiply by 1000 seperately here just time*seconds will work fine 
             } catch (error) {
                 console.error('Error:', error.message);
                 if (error.response && error.response.status === 401) {

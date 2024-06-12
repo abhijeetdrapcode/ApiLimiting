@@ -1,5 +1,4 @@
 const redisClient = require('../db/redisdb');
-// const redisClient = connectDatabase();
 const generateToken = require('./tokenGenerator');
 
 const tokenValidator = async (req, res, next) => {
