@@ -2,7 +2,6 @@ const serverURL = 'http://localhost:3000';
 
 const headers = {
   'Host': window.location.host,
-  'Connection': navigator.connection ? navigator.connection.effectiveType : '',
   'Browser': navigator.userAgentData ? navigator.userAgentData.brands.map(brand => `"${brand.brand.replace(/"/g, '\\\\"')}"; v="${brand.version}"`).join(' ') : '',
   'OperatingSystem': navigator.userAgentData ? `"${navigator.userAgentData.platform}"` : '',
   'User-Agent': navigator.userAgent,
